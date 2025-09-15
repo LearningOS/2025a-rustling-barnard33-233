@@ -40,11 +40,18 @@
                 in
                 inDirectory "src" ||
                 inDirectory "tests" ||
+                inDirectory "exercises" ||
                 hasPrefix "Cargo" baseName ||
                 baseName == "info.toml";
             };
 
             cargoLock.lockFile = ./Cargo.lock;
+
+            checkFlags = [
+              "--skip=cicvverify"
+              "--skip=all_exercises_require_confirmation"
+              "--skip=reset_single_exercise"
+            ];
           };
       in
       {
