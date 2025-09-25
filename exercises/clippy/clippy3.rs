@@ -6,13 +6,9 @@
 
 use std::mem::swap;
 
-#[allow(unused_variables, unused_assignments, clippy::unnecessary_unwrap, clippy::unnecessary_literal_unwrap)]
+#[allow(unused_variables, unused_assignments)]
 fn main() {
     let my_option: Option<()> = None;
-    if my_option.is_some() {
-        my_option.unwrap();
-    }
-
     let my_arr = &[
         -1, -2, -3,
         -4, -5, -6,
