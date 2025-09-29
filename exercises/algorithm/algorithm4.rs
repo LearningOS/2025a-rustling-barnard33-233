@@ -3,9 +3,8 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
 
 #[derive(Debug)]
@@ -50,13 +49,19 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        match self.root {
+            Some(ref mut tree) => tree.insert(value),
+            None => self.root = Some(Box::new(TreeNode {value, left: None, right: None}))
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        match &self.root {
+            Some(tree) => tree.search(&value),
+            None => false
+        }
     }
 }
 
@@ -67,7 +72,54 @@ where
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
         //TODO
+        if value > self.value {
+            match self.right {
+                Some(ref mut subtree) => {
+                    subtree.insert(value);
+                },
+                None => {
+                    self.right = Some(Box::new(TreeNode {value, left: None, right: None}));
+                }
+            }
+            return
+        }
+        if value < self.value {
+            match self.left {
+                Some(ref mut subtree) => {
+                    subtree.insert(value);
+                },
+                None => {
+                    self.left = Some(Box::new(TreeNode {value, left: None, right: None}));
+                }
+            }
+            return
+        }
     }
+
+    fn search(&self, value: &T) -> bool{
+        if self.value < *value {
+            match &self.right {
+                Some(subtree)=>{
+                    return subtree.search(value);
+                },
+                None => {
+                    return false;
+                }
+            }
+        }
+        if self.value > *value {
+            match &self.left {
+                Some(subtree)=>{
+                    return subtree.search(value);
+                },
+                None => {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+    
 }
 
 

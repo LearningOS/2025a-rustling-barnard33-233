@@ -2,10 +2,9 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
-
 use std::cmp::Ord;
 use std::default::Default;
+use std::mem::swap;
 
 pub struct Heap<T>
 where
@@ -38,10 +37,57 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        if self.count == 0 && self.items.len() == 1{
+            self.items[0] = value;
+            self.count += 1;
+            return;
+        }
+        self.count += 1;
+        self.items.push(value);
+        let mut i = self.count - 1;
+        while i > 0 {
+            let p = self.parent_idx(i);
+            if (self.comparator)(&self.items[p], &self.items[i]) {
+                break;
+            }
+            self.items.swap(i, p);
+            i = p;
+        }
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        if self.count == 0 {
+            return None;
+        }
+        self.items.swap(0, self.count - 1);
+        let res = self.items.pop();
+        self.count -= 1;
+        let mut i = 0;
+        while self.children_present(i) {
+            let left = self.left_child_idx(i);
+            let right = self.right_child_idx(i);
+            let mut largest = i;
+            if left < self.count {
+                if (self.comparator)(&self.items[left], &self.items[i]){
+                    largest = left;
+                }
+            }
+            if right < self.count {
+                if (self.comparator)(&self.items[right], &self.items[i]){
+                    largest = right;
+                }
+            }
+            if largest == i {
+                break;
+            }
+            self.items.swap(i, largest);
+            i = largest;
+        }
+        res
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
-        idx / 2
+        (idx - 1) / 2
     }
 
     fn children_present(&self, idx: usize) -> bool {
@@ -84,8 +130,7 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        self.pop()
     }
 }
 
